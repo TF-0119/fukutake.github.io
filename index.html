@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>緑灯は呼吸している</title>
+  <meta name="description" content="短編『緑灯は呼吸している』の静的HTML版。本文は一言一句変更せずに収録。" />
+  <style>
+    :root{
+      --bg: #0b0f16;
+      --bg2:#0a0e15;
+      --fg: #e8eefb;
+      --muted:#a7b7d9;
+      --accent:#7bf0a0; /* 緑灯っぽいカラー */
+      --card:#0f1624;
+      --border: rgba(123, 240, 160, 0.25);
+    }
+    html,body{height:100%;}
+    body{
+      margin:0;
+      color:var(--fg);
+      background:
+        radial-gradient(1200px 800px at 15% 10%, rgba(123,240,160,0.08), transparent 60%),
+        radial-gradient(800px 600px at 85% 20%, rgba(100,180,255,0.06), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      font-family: "Noto Serif JP", "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "游明朝", serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .wrapper{
+      min-height:100%;
+      display:grid;
+      place-items:center;
+      padding:clamp(16px, 3vw, 48px);
+    }
+    .card{
+      position:relative;
+      width:min(92vw, 880px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border:1px solid var(--border);
+      border-radius:20px;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.05) inset,
+        0 40px 80px rgba(0,0,0,0.35);
+      padding:clamp(18px, 3.2vw, 36px);
+      backdrop-filter: blur(4px);
+    }
+    /* 緑灯のビーコン風アクセント */
+    .card::before{
+      content:"";
+      position:absolute; inset:auto 18px -10px auto;
+      width:12px; height:12px; border-radius:999px;
+      background: radial-gradient(circle at 35% 35%, #fff 0 15%, var(--accent) 32%, rgba(123,240,160,0.9) 55%, rgba(123,240,160,0.0) 70%);
+      filter: drop-shadow(0 0 10px rgba(123,240,160,0.65)) drop-shadow(0 0 20px rgba(123,240,160,0.5));
+    }
+    .meta{
+      display:flex; align-items:center; gap:10px; color:var(--muted);
+      font-size:12px; letter-spacing:.04em; margin-bottom:6px;
+    }
+    .story{
+      margin:0;
+      white-space:pre-wrap; /* 与えられた改行・空白を保持 */
+      word-break:break-word;
+      line-height:1.95;
+      font-size:clamp(15px, 1.9vw, 18px);
+      letter-spacing:.03em;
+    }
+    .footer{
+      margin-top:18px; color:var(--muted); font-size:12px;
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+      opacity:.9;
+    }
+    .footer .badge{
+      border:1px solid rgba(167,183,217,.35);
+      padding:2px 8px; border-radius:999px;
+    }
+    @media print {
+      body{ background:#fff; color:#111; }
+      .card{ box-shadow:none; border-color:#ccc; }
+      .card::before{ display:none; }
+      .footer{ display:none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <article class="card" aria-label="短編『緑灯は呼吸している』">
+      <div class="meta"><span class="badge">静的HTML</span><span class="badge">本文は原文ママ</span></div>
+      <pre class="story">緑灯は呼吸している
+【要旨】
+緑灯と子守歌〈ミ—ラ—ファ〉に導かれ、私は幽霊化したコロニー船に接近する。断片AI『アザミ』は“記憶種子”を彗星の揮発層へ投下せよと告げ、規約は資産回収を命じる。選べば資格剥奪と私的損失。私は一拍の転写を受け取り、関係として芽吹く未来に舵を切る。
+
+【受信】
+静かな宙域。緑灯が点滅する。SOSの底で〈ミ—ラ—ファ〉、三拍目に欠落。周期は±0.2秒ぶれる。距離は1.7km、1.2km、0.8km。記録を取りつつ接近。舌先が乾く。視界の縁がざらつく。肩帯が小さく軋むが固定する。語尾の欠けた呼びかけ。「状況報…せ」ビーコンを確認する。BEACON=救難灯｜発光=緑｜ぶれ=±0.2秒。
+
+【接舷】
+ハッチを越える。霜と剥離材が漂う。『…こちら、アザミ』短句、間、微遅延。電源の脈が弱い。SEED=用途｜媒体=揮発層｜作用=微粒化→尾流混入→搬送。揮発層に定着すれば、通過天体へ記録が拡がる。投下は未完、燃料は乏しい。声は途切れ、間が詰まる。手袋の甲に白い粉が残る。
+
+【衝突】
+UI断片が滲む。条45-β｜資産回収優先｜委任状なき人道支援不可｜違反=資格剥奪・船籍ブラック60ヶ月・保険停止・違約金。圧縮音声は欠落する。「…報…せ…即…」アザミは短く言う。「種、投下。いま」私はロッカーを開け、名札の縁を指先でなぞる。冷えが爪へ移る。呼吸が浅くなる。
+
+【窓】
+潮汐で軌道窓が閉じる。TIDE=潮汐｜効果=窓の縮小。480秒。舌で番号をなぞる。240秒。顎を引く。通信は『撤…命令…即時』。90秒。喉が鳴る。息を一拍止め、手袋の内側で汗の位置がずれるのを感じる。ベルトがわずかに軋む。背筋が固まる。
+
+【決断】
+回線をミュート。固いクリックが指に残る。資産回収の画面を閉じ、姿勢制御へ切替。ATTITUDE=姿勢制御｜切替=回収→手動。『手動、助力』と送る。更生プログラム最終判定前の案件。保証人の署名、脆い台所勘定。失えば復帰はない。私はシートの縫い目を握る。
+
+【点火】
+エアロックを抜ける。霜→温度→手順確認で通す。管の霜を吹く。温度を上げる。手順を二重に確かめる。NOZZLE=噴射口｜漏れ=無。先端器具を噴射口へ寄せ、導通を合わせる。噴き出しが伸び、氷片が星光を砕く。機体は0.7度だけ傾く。私は肘を固め、偏りを背で受ける。
+
+【転写】
+点火の刹那、子守歌が返る。〈ミ—ラ—ファ〉、同じ欠落。『…少し、置く。あなたに。』鼓動と呼吸が半拍だけ同期する。SYNC=同期｜位相=+0.5。ログが灯る。RELAYS=+3｜NEAR=2｜FAR=1｜PHASE=+0.5。私は頷かず、配線の束を押さえた。掌の内側が温む。
+
+【離脱】
+コロニー船の航跡が薄く伸びる。燃料は尽き、報酬は流れる。胸ポケットの小さなメモリ素子。ブラックリストを受け入れる。BLACKLIST=60ヶ月｜QUAL=REVOKED｜FINES=+12%｜LEDGER=OVERDUE→TRANSFER｜GUARANTOR=SISTER(IMPACT)。私はスロットルを絞り、無音の空間に身を置く。アザミの返答はもうない。
+
+【芽】
+少し時間が過ぎる。温室で若芽が開く。光度計を覗く。LC=光度曲線｜変化=歪み小。遠方の尾がわずかに色を変える。ラジオの底で同じ音階が揺れる。私は水を一滴落とす。緑灯は呼吸している。</pre>
+      <div class="footer">
+        <span class="badge">© 著者</span>
+        <span class="badge">フォント: Noto Serif JP（端末依存）</span>
+        <span class="badge">印刷対応</span>
+      </div>
+    </article>
+  </div>
+</body>
+</html>
