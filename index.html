@@ -7,86 +7,56 @@
   <meta name="description" content="短編『緑灯は呼吸している』の静的HTML版。本文は一言一句変更せずに収録。" />
   <style>
     :root{
-      --bg: #0b0f16;
-      --bg2:#0a0e15;
-      --fg: #e8eefb;
-      --muted:#a7b7d9;
-      --accent:#7bf0a0; /* 緑灯っぽいカラー */
-      --card:#0f1624;
-      --border: rgba(123, 240, 160, 0.25);
+      --bg:#0a0b0d;
+      --fg:#e9efe8;
+      --muted:#a3a9b0;
+      --panel:#0f1116;
+      --border:#161a20;
     }
     html,body{height:100%;}
     body{
       margin:0;
+      background:var(--bg);
       color:var(--fg);
-      background:
-        radial-gradient(1200px 800px at 15% 10%, rgba(123,240,160,0.08), transparent 60%),
-        radial-gradient(800px 600px at 85% 20%, rgba(100,180,255,0.06), transparent 60%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-      font-family: "Noto Serif JP", "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "游明朝", serif;
+      font-family: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", "游明朝", serif;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
     }
     .wrapper{
       min-height:100%;
-      display:grid;
-      place-items:center;
-      padding:clamp(16px, 3vw, 48px);
+      display:block;
+      padding:clamp(24px, 5vw, 72px) 16px 64px;
     }
     .card{
-      position:relative;
-      width:min(92vw, 880px);
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      max-width:740px;
+      margin:0 auto;
+      background:var(--panel);
       border:1px solid var(--border);
-      border-radius:20px;
-      box-shadow:
-        0 1px 0 rgba(255,255,255,0.05) inset,
-        0 40px 80px rgba(0,0,0,0.35);
-      padding:clamp(18px, 3.2vw, 36px);
-      backdrop-filter: blur(4px);
-    }
-    /* 緑灯のビーコン風アクセント */
-    .card::before{
-      content:"";
-      position:absolute; inset:auto 18px -10px auto;
-      width:12px; height:12px; border-radius:999px;
-      background: radial-gradient(circle at 35% 35%, #fff 0 15%, var(--accent) 32%, rgba(123,240,160,0.9) 55%, rgba(123,240,160,0.0) 70%);
-      filter: drop-shadow(0 0 10px rgba(123,240,160,0.65)) drop-shadow(0 0 20px rgba(123,240,160,0.5));
-    }
-    .meta{
-      display:flex; align-items:center; gap:10px; color:var(--muted);
-      font-size:12px; letter-spacing:.04em; margin-bottom:6px;
+      border-radius:12px;
+      padding:clamp(20px, 3vw, 32px);
+      box-shadow:0 8px 24px rgba(0,0,0,.35);
     }
     .story{
       margin:0;
-      white-space:pre-wrap; /* 与えられた改行・空白を保持 */
+      white-space:pre-wrap; /* 改行・空白を保持 */
       word-break:break-word;
-      line-height:1.95;
-      font-size:clamp(15px, 1.9vw, 18px);
-      letter-spacing:.03em;
-    }
-    .footer{
-      margin-top:18px; color:var(--muted); font-size:12px;
-      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
-      opacity:.9;
-    }
-    .footer .badge{
-      border:1px solid rgba(167,183,217,.35);
-      padding:2px 8px; border-radius:999px;
+      line-break:strict;
+      line-height:2.05;
+      font-size:clamp(16px, 1.9vw, 19px);
+      letter-spacing:.02em;
+      font-feature-settings: "palt" 1, "liga" 1;
+      text-wrap:pretty;
     }
     @media print {
       body{ background:#fff; color:#111; }
-      .card{ box-shadow:none; border-color:#ccc; }
-      .card::before{ display:none; }
-      .footer{ display:none; }
+      .card{ box-shadow:none; border:none; background:#fff; }
     }
   </style>
 </head>
 <body>
   <div class="wrapper">
     <article class="card" aria-label="短編『緑灯は呼吸している』">
-      <div class="meta"><span class="badge">静的HTML</span><span class="badge">本文は原文ママ</span></div>
-      <pre class="story">緑灯は呼吸している
+            <pre class="story">緑灯は呼吸している
 【要旨】
 緑灯と子守歌〈ミ—ラ—ファ〉に導かれ、私は幽霊化したコロニー船に接近する。断片AI『アザミ』は“記憶種子”を彗星の揮発層へ投下せよと告げ、規約は資産回収を命じる。選べば資格剥奪と私的損失。私は一拍の転写を受け取り、関係として芽吹く未来に舵を切る。
 
@@ -116,12 +86,7 @@ UI断片が滲む。条45-β｜資産回収優先｜委任状なき人道支援�
 
 【芽】
 少し時間が過ぎる。温室で若芽が開く。光度計を覗く。LC=光度曲線｜変化=歪み小。遠方の尾がわずかに色を変える。ラジオの底で同じ音階が揺れる。私は水を一滴落とす。緑灯は呼吸している。</pre>
-      <div class="footer">
-        <span class="badge">© 著者</span>
-        <span class="badge">フォント: Noto Serif JP（端末依存）</span>
-        <span class="badge">印刷対応</span>
-      </div>
-    </article>
+          </article>
   </div>
 </body>
 </html>
