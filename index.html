@@ -1,416 +1,125 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>ピッチ資料｜毎週お題の匿名SNS（モバイル最適化）</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>匿名でゆるく作る場｜毎週お題SNS（草案）</title>
+<meta name="color-scheme" content="light dark">
 <style>
   :root{
-    --bg:#0b0f17;
-    --panel:#121826;
-    --panel-2:#0e1422;
-    --text:#e7eefc;
-    --muted:#9fb0d1;
-    --accent:#7aa2ff;
-    --accent-2:#55f0a3;
-    --shadow: 0 10px 30px rgba(0,0,0,.35);
-    --radius: 18px;
+    --bg:#0f1116;
+    --fg:#e9ecf4;
+    --muted:#9aa7bf;
+    --accent:#6ea8fe;
+    --card:#151a22;
+    --border:#2a3240;
   }
-  *{box-sizing:border-box}
-  html,body{height:100%}
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#f7f9ff; --fg:#0f1116; --muted:#4f5b74; --accent:#3b6cff; --card:#ffffff; --border:#e5e9f2; }
+  }
+  *{ box-sizing:border-box }
   body{
-    margin:0;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN",
-                 "Noto Sans JP","Yu Gothic", "Meiryo", Arial, sans-serif;
-    color:var(--text);
-    background: radial-gradient(1000px 700px at 80% -10%, rgba(85,240,163,.12), transparent 50%),
-                radial-gradient(800px 600px at -10% 110%, rgba(122,162,255,.12), transparent 50%),
-                var(--bg);
-    line-height:1.6;
-    -webkit-tap-highlight-color: transparent;
+    margin:0; background:var(--bg); color:var(--fg);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+      "Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic","Meiryo", Arial, sans-serif;
+    line-height:1.65; -webkit-text-size-adjust:100%;
   }
-
-  /* Slides */
-  .deck{
-    position:relative;
-    width:100%;
-    height:100vh;
-    height:100svh; /* modern mobile browsers */
-    overflow:hidden;
-  }
-  @supports not (height: 100svh){
-    .deck{ height: 100vh; }
-  }
-  .slide{
-    position:absolute; inset:0;
-    padding:48px clamp(16px, 4vw, 64px) 96px; /* extra bottom space for mobile nav */
-    display:grid;
-    grid-template-rows:auto 1fr auto;
-    gap:24px;
-    transform: translateX(100%);
-    opacity:0;
-    transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s ease;
-    touch-action: pan-y; /* allow horizontal swipe */
-  }
-  .slide.active{ transform: translateX(0); opacity:1 }
-  .slide.prev{ transform: translateX(-100%) }
-  header h1, header h2, header h3{ margin:0 }
-  header h1{ font-size: clamp(22px, 5vw, 42px); letter-spacing:.02em }
-  header p.lead{
-    color:var(--muted);
-    margin-top:8px;
-    font-size: clamp(14px, 2.8vw, 18px);
-  }
-
-  /* Cards */
-  .grid{
-    display:grid; gap:16px;
-    grid-template-columns: repeat(12, 1fr);
-  }
+  .wrap{ max-width:780px; margin:0 auto; padding:24px clamp(16px,4vw,24px); }
+  header{ padding:8px 0 6px; }
+  h1{ font-size:clamp(26px,6vw,40px); margin:.2em 0 .1em }
+  .sub{ color:var(--muted); margin:0 0 12px; font-size:clamp(14px,3.2vw,16px) }
   .card{
-    background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
-    border:1px solid rgba(255,255,255,.07);
-    border-radius:var(--radius);
-    padding:16px;
-    box-shadow: var(--shadow);
+    background:var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:clamp(14px,3.2vw,18px); margin:12px 0;
   }
-  .muted{ color:var(--muted) }
-  .badge{ display:inline-block; padding:6px 10px; border-radius:100px; background:rgba(122,162,255,.15); border:1px solid rgba(122,162,255,.35); color:#d9e4ff; font-weight:600; letter-spacing:.02em; font-size:12px}
-  .list{ margin:0; padding-left:18px }
-  .list li{ margin:6px 0 }
-
-  /* Mock wireframes */
-  .wire{
-    background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
-    border:1px dashed rgba(255,255,255,.25);
-    border-radius:16px; padding:14px;
-    position:relative; overflow:hidden; min-height:160px;
+  h2{ font-size:clamp(18px,4.8vw,22px); margin:.2em 0 .2em }
+  p,li{ margin:.4em 0 }
+  ul{ padding-left:22px }
+  .pill{
+    display:inline-block; padding:6px 10px; border-radius:999px;
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    color: color-mix(in srgb, var(--accent) 85%, var(--fg));
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    font-weight:700; letter-spacing:.02em; font-size:12px;
   }
-  .wire .bar{height:12px; border-radius:8px; margin:6px 0; background: rgba(255,255,255,.08)}
-  .wire .box{border:1px solid rgba(255,255,255,.2); border-radius:12px; min-height:48px; margin:8px 0; background:rgba(255,255,255,.04)}
-  .wire .chip{display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.2); margin:4px 6px 0 0; font-size:12px; color:#cfe0ff}
-  .wire .hint{position:absolute; top:10px; right:12px; color:var(--muted); font-size:12px}
-
-  /* Timeline */
-  .timeline{ display:grid; gap:12px }
-  .phase{
-    display:grid; gap:6px;
-    grid-template-columns: 120px 1fr;
-    align-items:center;
+  .grid{ display:grid; gap:10px; grid-template-columns: 1fr 1fr }
+  @media (max-width:720px){ .grid{ grid-template-columns: 1fr } }
+  .ex{
+    display:inline-block; padding:6px 10px; border-radius:8px;
+    border:1px dashed var(--border); color:var(--muted); font-size:13px;
   }
-  .barwrap{ height:10px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; border:1px solid rgba(255,255,255,.08)}
-  .bar{ height:100%; width:0%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .9s ease }
-  .phase.active .bar{ width: 100% }
-
-  /* Footer (slide counter) */
-  footer{ display:flex; justify-content:space-between; align-items:center; color:var(--muted); gap:12px }
-  .kicker{ font-size:12px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase }
-
-  /* Fixed Mobile Nav */
-  .mobile-nav{
-    position: fixed;
-    left: 0; right: 0; bottom: 0;
-    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
-    display:flex; align-items:center; justify-content:space-between; gap:12px;
-    background: linear-gradient(180deg, rgba(10,14,24,0), rgba(10,14,24,.85) 30%);
-    pointer-events: none;
+  a.btn{
+    display:inline-block; margin-top:8px; padding:10px 14px; border-radius:10px;
+    border:1px solid var(--border); text-decoration:none; color:var(--fg);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    font-weight:800;
   }
-  .mobile-nav .btn{
-    pointer-events: auto;
-    flex: 1;
-    display:inline-flex; align-items:center; justify-content:center; gap:10px;
-    height:56px; font-size:16px; font-weight:700;
-    background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
-    border:1px solid rgba(255,255,255,.14);
-    border-radius:14px; color:var(--text);
-    box-shadow: var(--shadow);
-    user-select:none; -webkit-user-select:none;
-    touch-action: manipulation;
-  }
-  .mobile-nav .btn:active{ transform: translateY(1px) }
-  .mobile-nav .btn.primary{ border-color: rgba(122,162,255,.6) }
-
-  /* Pagination dots */
-  .dots{
-    position: fixed; right: 10px; top: 10px;
-    display:flex; gap:8px; align-items:center;
-  }
-  .dot{
-    width:8px; height:8px; border-radius:50%;
-    background: rgba(255,255,255,.25);
-    border:1px solid rgba(255,255,255,.25);
-  }
-  .dot.active{ background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-color: transparent }
-
-  /* Responsive */
-  @media (max-width: 920px){
-    .grid{ grid-template-columns: 1fr }
-    .phase{ grid-template-columns: 1fr }
-  }
+  footer{ color:var(--muted); font-size:13px; text-align:center; padding:18px 0 8px }
 </style>
 </head>
 <body>
-<div class="deck" id="deck">
-
-  <!-- Slide 1 -->
-  <section class="slide active" data-title="コンセプト & 課題">
+  <div class="wrap">
     <header>
-      <div class="kicker">ピッチ資料（仲間探し用）</div>
-      <h1>プロジェクト名：<span style="color:var(--accent)">毎週お題の匿名SNS</span></h1>
-      <p class="lead">「作って・見せて・評価し合う」。初心者が上級者へ育つ、プログラマーのためのコミュニティ。</p>
+      <h1>匿名プログラミングコミュニティ</h1>
+      <p class="sub">毎週ちょっとした「お題」を出して、みんなで作って見せ合うだけのサイト。</p>
     </header>
 
-    <main class="grid">
-      <div class="card" style="grid-column: span 6;">
-        <span class="badge">課題</span>
-        <ul class="list">
-          <li>初心者は学習を<strong>継続しにくい</strong>。アウトプットの場と仲間が足りない。</li>
-          <li>作品が<strong>評価されにくい</strong>。承認やフィードバックの機会が少ない。</li>
-          <li>上級者も<strong>活躍の場</strong>が限定的（コードレビュー・知見共有が散在）。</li>
+    <section class="card">
+      <h2>やりたいこと（ざっくり）</h2>
+      <ul>
+        <li>毎週お題（例：<span class="ex">好きな飲み物のLPを作る</span> / <span class="ex">APIで天気を出す</span>）</li>
+        <li>作ったらURLを貼る → みんなで見て評価　(高評価/コメント)</li>
+        <li>投票でゆるいランキング。称号がちょっと貯まる</li>
+        <li>困ったらミニQ&amp;A（知恵袋っぽく、匿名でOK）</li>
+      </ul>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>トーン & ルール</h2>
+        <ul>
+          <li>ゆるい / 褒め合い重視 🙌</li>
+          <li>匿名でOK、実名強要なし</li>
+          <li>パクリ禁止・引用は明記</li>
         </ul>
       </div>
-      <div class="card" style="grid-column: span 6;">
-        <span class="badge">解決策</span>
-        <ul class="list">
-          <li><strong>毎週「お題」</strong>に沿ってWeb作品を投稿（匿名OK）。</li>
-          <li><strong>投票・ランキング</strong>で楽しく評価。称号で継続モチベを可視化。</li>
-          <li><strong>Q&A（知恵袋）</strong>で初心者も安心。上級者はレビューで称号＆貢献度。</li>
-          <li><strong>広告/企業案件</strong>をお題に自然組み込み（参加型広告）。</li>
+      <div class="card">
+        <h2>なにが楽しい？</h2>
+        <ul>
+          <li>毎週「作る理由」ができる</li>
+          <li>人の作品から学べる</li>
+          <li>承認欲求が満たせる</li>
         </ul>
       </div>
-    </main>
+    </section>
 
-    <footer>
-      <div>1 / 4「コンセプト & 課題」</div>
-      <div class="muted">スワイプまたは下部ボタンで移動</div>
-    </footer>
-  </section>
+    <section class="card">
+      <h2>こんなお題を想定</h2>
+      <ul>
+        <li>初級：自己紹介ページ / フォーム作成 / 画像ギャラリー</li>
+        <li>中級：外部APIで何か出す / レスポンシブ対応</li>
+        <li>上級：小さなWebアプリ / ミニゲーム / パフォーマンス改善</li>
+      </ul>
+    </section>
 
-  <!-- Slide 2 -->
-  <section class="slide" data-title="画面モック">
-    <header>
-      <div class="kicker">モックアップ</div>
-      <h2>UIイメージ（ワイヤーフレーム）</h2>
-      <p class="lead">視覚で伝える：トップ・投稿・ランキングの3画面。</p>
-    </header>
-
-    <main class="grid">
-      <div class="card" style="grid-column: span 4;">
-        <div class="wire">
-          <div class="hint">トップ（お題一覧＋作品ギャラリー）</div>
-          <div class="bar" style="width:60%"></div>
-          <div class="bar" style="width:40%"></div>
-          <span class="chip">#今週のお題</span><span class="chip">#スポンサー</span><span class="chip">#初級</span>
-          <div class="box"></div>
-          <div class="box"></div>
-          <div class="box"></div>
-        </div>
+    <section class="grid">
+      <div class="card">
+        <h2>今のところ</h2>
+        <p>まずは超シンプルに始める予定。<br>
+        お題・投稿・投票・ミニQ&amp;Aだけ。</p>
       </div>
-      <div class="card" style="grid-column: span 4;">
-        <div class="wire">
-          <div class="hint">投稿フォーム（URL/説明/タグ）</div>
-          <div class="bar" style="width:50%"></div>
-          <div class="box" style="min-height:44px"></div>
-          <div class="box" style="min-height:100px"></div>
-          <span class="chip">#タグ入力</span><span class="chip">公開範囲:匿名</span>
-        </div>
-      </div>
-      <div class="card" style="grid-column: span 4;">
-        <div class="wire">
-          <div class="hint">投票・ランキング</div>
-          <div class="bar" style="width:70%"></div>
-          <div class="box"></div>
-          <div class="box"></div>
-          <div class="box"></div>
-        </div>
-      </div>
-    </main>
-
-    <footer>
-      <div>2 / 4「画面モック」</div>
-      <div class="muted">スワイプまたは下部ボタンで移動</div>
-    </footer>
-  </section>
-
-  <!-- Slide 3 -->
-  <section class="slide" data-title="ロードマップ">
-    <header>
-      <div class="kicker">計画</div>
-      <h2>ロードマップ（2年スパン）</h2>
-      <p class="lead">小さく始めて回し、データで磨いていく。</p>
-    </header>
-
-    <main class="grid">
-      <div class="card" style="grid-column: span 12;">
-        <div class="timeline">
-          <div class="phase active">
-            <div><strong>フェーズ1</strong><br><span class="muted">0〜6ヶ月</span></div>
-            <div class="barwrap"><div class="bar"></div></div>
-          </div>
-          <div class="card muted" style="grid-column: span 12; margin-top:-4px; padding:12px 14px;">
-            ・MVP：お題投稿 / Q&A / 投票&ランキング / プロフィール&称号<br>
-            ・クローズドβ（50〜100人）→ 過疎感対策。初期アンケートで改善。
-          </div>
-
-          <div class="phase">
-            <div><strong>フェーズ2</strong><br><span class="muted">6〜12ヶ月</span></div>
-            <div class="barwrap"><div class="bar"></div></div>
-          </div>
-          <div class="card muted" style="grid-column: span 12; margin-top:-4px; padding:12px 14px;">
-            ・スポンサーお題（参加型広告）導入、簡易収益化。<br>
-            ・イベント：月間テーマ、スポンサー賞。<br>
-            ・ポートフォリオ自動生成（作品が履歴に並ぶ）。
-          </div>
-
-          <div class="phase">
-            <div><strong>フェーズ3</strong><br><span class="muted">1〜2年</span></div>
-            <div class="barwrap"><div class="bar"></div></div>
-          </div>
-          <div class="card muted" style="grid-column: span 12; margin-top:-4px; padding:12px 14px;">
-            ・AI活用：コードの自動フィードバック / お題提案 / 不正検知。<br>
-            ・チーム開発お題、API連携系の高難易度カテゴリ。
-          </div>
-
-          <div class="phase">
-            <div><strong>フェーズ4</strong><br><span class="muted">2年〜</span></div>
-            <div class="barwrap"><div class="bar"></div></div>
-          </div>
-          <div class="card muted" style="grid-column: span 12; margin-top:-4px; padding:12px 14px;">
-            ・海外展開、他分野（デザイン / AI / ゲーム）へ拡張。<br>
-            ・匿名カルチャーを保ったまま規模の拡大。
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <footer>
-      <div>3 / 4「ロードマップ」</div>
-      <div class="muted">スワイプまたは下部ボタンで移動</div>
-    </footer>
-  </section>
-
-  <!-- Slide 4 -->
-  <section class="slide" data-title="未来像 & 仲間募集">
-    <header>
-      <div class="kicker">ビジョン</div>
-      <h2>未来像 & 仲間募集</h2>
-      <p class="lead">匿名でも、成長の物語が残る場所。広告も「遊び」として楽しめる。</p>
-    </header>
-
-    <main class="grid">
-      <div class="card" style="grid-column: span 7;">
-        <span class="badge">未来像</span>
-        <ul class="list">
-          <li>初心者が上級者に育ち、<strong>実績が自動でポートフォリオ化</strong>。</li>
-          <li><strong>参加型広告</strong>：企業のお題で遊ぶ → 自然に収益化。</li>
-          <li>世界中のプログラマーが<strong>匿名で交流</strong>する“プログラマー版pixiv”。</li>
+      <div class="card">
+        <h2>あとでやるかも</h2>
+        <ul>
+          <li>スポンサーお題（参加型広告）</li>
+          <li>作品の自動ポートフォリオ化</li>
+          <li>AIでの軽いコードフィードバック</li>
+          <li>フォローシステムを追加して路線を変更(収益化とかも実装)</li>
         </ul>
-        <div class="card" style="margin-top:12px">
-          <div class="muted">キャッチコピー案</div>
-          <div style="font-size:20px; margin-top:6px"><strong>「作ろう。見せよう。育て合おう。」</strong></div>
-        </div>
       </div>
-      <div class="card" style="grid-column: span 5;">
-        <span class="badge">求める仲間（Co-founder / 初期メンバー）</span>
-        <ul class="list">
-          <li>フロントエンド / バックエンド エンジニア</li>
-          <li>デザイン / UI（ワイヤーからビジュアルまで）</li>
-          <li>広告営業（スポンサーお題の導入）</li>
-          <li>AI担当（コード評価・お題生成・不正検知）</li>
-        </ul>
-        <div class="card" style="margin-top:12px">
-          <div class="muted">お問い合わせ</div>
-          <div>ご連絡先：<em>（ここにX/メール/Discordを記載）</em></div>
-        </div>
-      </div>
-    </main>
+    </section>
+  </div>
 
-    <footer>
-      <div>4 / 4「未来像 & 仲間募集」</div>
-      <div class="muted">スワイプまたは下部ボタンで移動</div>
-    </footer>
-  </section>
-</div>
-
-<!-- Pagination dots -->
-<div class="dots" id="dots"></div>
-
-<!-- Fixed Mobile Nav -->
-<div class="mobile-nav">
-  <button class="btn" id="prevBtn" aria-label="前のスライド">← 前へ</button>
-  <button class="btn primary" id="nextBtn" aria-label="次のスライド">次へ →</button>
-</div>
-
-<script>
-(function(){
-  const slides = Array.from(document.querySelectorAll('.slide'));
-  const dotsWrap = document.getElementById('dots');
-  slides.forEach((_,i)=>{
-    const d = document.createElement('div');
-    d.className = 'dot' + (i===0 ? ' active':'');
-    dotsWrap.appendChild(d);
-  });
-  const dots = Array.from(document.querySelectorAll('.dot'));
-
-  let idx = 0;
-  const clamp = (n)=> (n + slides.length) % slides.length;
-
-  const update = ()=>{
-    slides.forEach((s,i)=>{
-      s.classList.remove('active','prev');
-      if(i === idx) s.classList.add('active');
-      if(i < idx) s.classList.add('prev');
-    });
-    dots.forEach((d,i)=> d.classList.toggle('active', i===idx));
-  };
-
-  const next = ()=>{ idx = clamp(idx + 1); update(); };
-  const prev = ()=>{ idx = clamp(idx - 1); update(); };
-
-  // Buttons
-  document.getElementById('nextBtn').addEventListener('click', next);
-  document.getElementById('prevBtn').addEventListener('click', prev);
-
-  // Keyboard
-  document.addEventListener('keydown', (e)=>{
-    if(e.key === 'ArrowRight' || e.key === 'PageDown') next();
-    if(e.key === 'ArrowLeft' || e.key === 'PageUp') prev();
-  });
-
-  // Swipe
-  let startX = null, startY = null, touching = false;
-  const threshold = 40; // px
-  const onTouchStart = (e)=>{
-    const t = e.touches[0];
-    startX = t.clientX; startY = t.clientY; touching = true;
-  };
-  const onTouchMove = (e)=>{
-    if(!touching) return;
-    // prevent accidental vertical scroll only if horizontal is dominant
-    const dx = e.touches[0].clientX - startX;
-    const dy = e.touches[0].clientY - startY;
-    if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10){
-      e.preventDefault();
-    }
-  };
-  const onTouchEnd = (e)=>{
-    if(!touching) return;
-    const t = e.changedTouches[0];
-    const dx = t.clientX - startX;
-    if(Math.abs(dx) > threshold){
-      if(dx < 0) next(); else prev();
-    }
-    touching = false;
-  };
-
-  slides.forEach(s=>{
-    s.addEventListener('touchstart', onTouchStart, {passive:true});
-    s.addEventListener('touchmove', onTouchMove, {passive:false});
-    s.addEventListener('touchend', onTouchEnd, {passive:true});
-  });
-
-  update();
-})();
-</script>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
