@@ -1,92 +1,416 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>緑灯は呼吸している</title>
-  <meta name="description" content="短編『緑灯は呼吸している』の静的HTML版。本文は一言一句変更せずに収録。" />
-  <style>
-    :root{
-      --bg:#0a0b0d;
-      --fg:#e9efe8;
-      --muted:#a3a9b0;
-      --panel:#0f1116;
-      --border:#161a20;
-    }
-    html,body{height:100%;}
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--fg);
-      font-family: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", "游明朝", serif;
-      -webkit-font-smoothing: antialiased;
-      text-rendering: optimizeLegibility;
-    }
-    .wrapper{
-      min-height:100%;
-      display:block;
-      padding:clamp(24px, 5vw, 72px) 16px 64px;
-    }
-    .card{
-      max-width:740px;
-      margin:0 auto;
-      background:var(--panel);
-      border:1px solid var(--border);
-      border-radius:12px;
-      padding:clamp(20px, 3vw, 32px);
-      box-shadow:0 8px 24px rgba(0,0,0,.35);
-    }
-    .story{
-      margin:0;
-      white-space:pre-wrap; /* 改行・空白を保持 */
-      word-break:break-word;
-      line-break:strict;
-      line-height:2.05;
-      font-size:clamp(16px, 1.9vw, 19px);
-      letter-spacing:.02em;
-      font-feature-settings: "palt" 1, "liga" 1;
-      text-wrap:pretty;
-    }
-    @media print {
-      body{ background:#fff; color:#111; }
-      .card{ box-shadow:none; border:none; background:#fff; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>ピッチ資料｜毎週お題の匿名SNS（モバイル最適化）</title>
+<style>
+  :root{
+    --bg:#0b0f17;
+    --panel:#121826;
+    --panel-2:#0e1422;
+    --text:#e7eefc;
+    --muted:#9fb0d1;
+    --accent:#7aa2ff;
+    --accent-2:#55f0a3;
+    --shadow: 0 10px 30px rgba(0,0,0,.35);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP","Yu Gothic", "Meiryo", Arial, sans-serif;
+    color:var(--text);
+    background: radial-gradient(1000px 700px at 80% -10%, rgba(85,240,163,.12), transparent 50%),
+                radial-gradient(800px 600px at -10% 110%, rgba(122,162,255,.12), transparent 50%),
+                var(--bg);
+    line-height:1.6;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Slides */
+  .deck{
+    position:relative;
+    width:100%;
+    height:100vh;
+    height:100svh; /* modern mobile browsers */
+    overflow:hidden;
+  }
+  @supports not (height: 100svh){
+    .deck{ height: 100vh; }
+  }
+  .slide{
+    position:absolute; inset:0;
+    padding:48px clamp(16px, 4vw, 64px) 96px; /* extra bottom space for mobile nav */
+    display:grid;
+    grid-template-rows:auto 1fr auto;
+    gap:24px;
+    transform: translateX(100%);
+    opacity:0;
+    transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s ease;
+    touch-action: pan-y; /* allow horizontal swipe */
+  }
+  .slide.active{ transform: translateX(0); opacity:1 }
+  .slide.prev{ transform: translateX(-100%) }
+  header h1, header h2, header h3{ margin:0 }
+  header h1{ font-size: clamp(22px, 5vw, 42px); letter-spacing:.02em }
+  header p.lead{
+    color:var(--muted);
+    margin-top:8px;
+    font-size: clamp(14px, 2.8vw, 18px);
+  }
+
+  /* Cards */
+  .grid{
+    display:grid; gap:16px;
+    grid-template-columns: repeat(12, 1fr);
+  }
+  .card{
+    background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.00));
+    border:1px solid rgba(255,255,255,.07);
+    border-radius:var(--radius);
+    padding:16px;
+    box-shadow: var(--shadow);
+  }
+  .muted{ color:var(--muted) }
+  .badge{ display:inline-block; padding:6px 10px; border-radius:100px; background:rgba(122,162,255,.15); border:1px solid rgba(122,162,255,.35); color:#d9e4ff; font-weight:600; letter-spacing:.02em; font-size:12px}
+  .list{ margin:0; padding-left:18px }
+  .list li{ margin:6px 0 }
+
+  /* Mock wireframes */
+  .wire{
+    background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+    border:1px dashed rgba(255,255,255,.25);
+    border-radius:16px; padding:14px;
+    position:relative; overflow:hidden; min-height:160px;
+  }
+  .wire .bar{height:12px; border-radius:8px; margin:6px 0; background: rgba(255,255,255,.08)}
+  .wire .box{border:1px solid rgba(255,255,255,.2); border-radius:12px; min-height:48px; margin:8px 0; background:rgba(255,255,255,.04)}
+  .wire .chip{display:inline-block; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.2); margin:4px 6px 0 0; font-size:12px; color:#cfe0ff}
+  .wire .hint{position:absolute; top:10px; right:12px; color:var(--muted); font-size:12px}
+
+  /* Timeline */
+  .timeline{ display:grid; gap:12px }
+  .phase{
+    display:grid; gap:6px;
+    grid-template-columns: 120px 1fr;
+    align-items:center;
+  }
+  .barwrap{ height:10px; background:rgba(255,255,255,.08); border-radius:999px; overflow:hidden; border:1px solid rgba(255,255,255,.08)}
+  .bar{ height:100%; width:0%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .9s ease }
+  .phase.active .bar{ width: 100% }
+
+  /* Footer (slide counter) */
+  footer{ display:flex; justify-content:space-between; align-items:center; color:var(--muted); gap:12px }
+  .kicker{ font-size:12px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase }
+
+  /* Fixed Mobile Nav */
+  .mobile-nav{
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background: linear-gradient(180deg, rgba(10,14,24,0), rgba(10,14,24,.85) 30%);
+    pointer-events: none;
+  }
+  .mobile-nav .btn{
+    pointer-events: auto;
+    flex: 1;
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    height:56px; font-size:16px; font-weight:700;
+    background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:14px; color:var(--text);
+    box-shadow: var(--shadow);
+    user-select:none; -webkit-user-select:none;
+    touch-action: manipulation;
+  }
+  .mobile-nav .btn:active{ transform: translateY(1px) }
+  .mobile-nav .btn.primary{ border-color: rgba(122,162,255,.6) }
+
+  /* Pagination dots */
+  .dots{
+    position: fixed; right: 10px; top: 10px;
+    display:flex; gap:8px; align-items:center;
+  }
+  .dot{
+    width:8px; height:8px; border-radius:50%;
+    background: rgba(255,255,255,.25);
+    border:1px solid rgba(255,255,255,.25);
+  }
+  .dot.active{ background: linear-gradient(180deg, var(--accent), var(--accent-2)); border-color: transparent }
+
+  /* Responsive */
+  @media (max-width: 920px){
+    .grid{ grid-template-columns: 1fr }
+    .phase{ grid-template-columns: 1fr }
+  }
+</style>
 </head>
 <body>
-  <div class="wrapper">
-    <article class="card" aria-label="短編『緑灯は呼吸している』">
-            <pre class="story">緑灯は呼吸している
-【要旨】
-緑灯と子守歌〈ミ—ラ—ファ〉に導かれ、私は幽霊化したコロニー船に接近する。断片AI『アザミ』は“記憶種子”を彗星の揮発層へ投下せよと告げ、規約は資産回収を命じる。選べば資格剥奪と私的損失。私は一拍の転写を受け取り、関係として芽吹く未来に舵を切る。
+<div class="deck" id="deck">
 
-【受信】
-静かな宙域。緑灯が点滅する。SOSの底で〈ミ—ラ—ファ〉、三拍目に欠落。周期は±0.2秒ぶれる。距離は1.7km、1.2km、0.8km。記録を取りつつ接近。舌先が乾く。視界の縁がざらつく。肩帯が小さく軋むが固定する。語尾の欠けた呼びかけ。「状況報…せ」ビーコンを確認する。BEACON=救難灯｜発光=緑｜ぶれ=±0.2秒。
+  <!-- Slide 1 -->
+  <section class="slide active" data-title="コンセプト & 課題">
+    <header>
+      <div class="kicker">ピッチ資料（仲間探し用）</div>
+      <h1>プロジェクト名：<span style="color:var(--accent)">毎週お題の匿名SNS</span></h1>
+      <p class="lead">「作って・見せて・評価し合う」。初心者が上級者へ育つ、プログラマーのためのコミュニティ。</p>
+    </header>
 
-【接舷】
-ハッチを越える。霜と剥離材が漂う。『…こちら、アザミ』短句、間、微遅延。電源の脈が弱い。SEED=用途｜媒体=揮発層｜作用=微粒化→尾流混入→搬送。揮発層に定着すれば、通過天体へ記録が拡がる。投下は未完、燃料は乏しい。声は途切れ、間が詰まる。手袋の甲に白い粉が残る。
+    <main class="grid">
+      <div class="card" style="grid-column: span 6;">
+        <span class="badge">課題</span>
+        <ul class="list">
+          <li>初心者は学習を<strong>継続しにくい</strong>。アウトプットの場と仲間が足りない。</li>
+          <li>作品が<strong>評価されにくい</strong>。承認やフィードバックの機会が少ない。</li>
+          <li>上級者も<strong>活躍の場</strong>が限定的（コードレビュー・知見共有が散在）。</li>
+        </ul>
+      </div>
+      <div class="card" style="grid-column: span 6;">
+        <span class="badge">解決策</span>
+        <ul class="list">
+          <li><strong>毎週「お題」</strong>に沿ってWeb作品を投稿（匿名OK）。</li>
+          <li><strong>投票・ランキング</strong>で楽しく評価。称号で継続モチベを可視化。</li>
+          <li><strong>Q&A（知恵袋）</strong>で初心者も安心。上級者はレビューで称号＆貢献度。</li>
+          <li><strong>広告/企業案件</strong>をお題に自然組み込み（参加型広告）。</li>
+        </ul>
+      </div>
+    </main>
 
-【衝突】
-UI断片が滲む。条45-β｜資産回収優先｜委任状なき人道支援不可｜違反=資格剥奪・船籍ブラック60ヶ月・保険停止・違約金。圧縮音声は欠落する。「…報…せ…即…」アザミは短く言う。「種、投下。いま」私はロッカーを開け、名札の縁を指先でなぞる。冷えが爪へ移る。呼吸が浅くなる。
+    <footer>
+      <div>1 / 4「コンセプト & 課題」</div>
+      <div class="muted">スワイプまたは下部ボタンで移動</div>
+    </footer>
+  </section>
 
-【窓】
-潮汐で軌道窓が閉じる。TIDE=潮汐｜効果=窓の縮小。480秒。舌で番号をなぞる。240秒。顎を引く。通信は『撤…命令…即時』。90秒。喉が鳴る。息を一拍止め、手袋の内側で汗の位置がずれるのを感じる。ベルトがわずかに軋む。背筋が固まる。
+  <!-- Slide 2 -->
+  <section class="slide" data-title="画面モック">
+    <header>
+      <div class="kicker">モックアップ</div>
+      <h2>UIイメージ（ワイヤーフレーム）</h2>
+      <p class="lead">視覚で伝える：トップ・投稿・ランキングの3画面。</p>
+    </header>
 
-【決断】
-回線をミュート。固いクリックが指に残る。資産回収の画面を閉じ、姿勢制御へ切替。ATTITUDE=姿勢制御｜切替=回収→手動。『手動、助力』と送る。更生プログラム最終判定前の案件。保証人の署名、脆い台所勘定。失えば復帰はない。私はシートの縫い目を握る。
+    <main class="grid">
+      <div class="card" style="grid-column: span 4;">
+        <div class="wire">
+          <div class="hint">トップ（お題一覧＋作品ギャラリー）</div>
+          <div class="bar" style="width:60%"></div>
+          <div class="bar" style="width:40%"></div>
+          <span class="chip">#今週のお題</span><span class="chip">#スポンサー</span><span class="chip">#初級</span>
+          <div class="box"></div>
+          <div class="box"></div>
+          <div class="box"></div>
+        </div>
+      </div>
+      <div class="card" style="grid-column: span 4;">
+        <div class="wire">
+          <div class="hint">投稿フォーム（URL/説明/タグ）</div>
+          <div class="bar" style="width:50%"></div>
+          <div class="box" style="min-height:44px"></div>
+          <div class="box" style="min-height:100px"></div>
+          <span class="chip">#タグ入力</span><span class="chip">公開範囲:匿名</span>
+        </div>
+      </div>
+      <div class="card" style="grid-column: span 4;">
+        <div class="wire">
+          <div class="hint">投票・ランキング</div>
+          <div class="bar" style="width:70%"></div>
+          <div class="box"></div>
+          <div class="box"></div>
+          <div class="box"></div>
+        </div>
+      </div>
+    </main>
 
-【点火】
-エアロックを抜ける。霜→温度→手順確認で通す。管の霜を吹く。温度を上げる。手順を二重に確かめる。NOZZLE=噴射口｜漏れ=無。先端器具を噴射口へ寄せ、導通を合わせる。噴き出しが伸び、氷片が星光を砕く。機体は0.7度だけ傾く。私は肘を固め、偏りを背で受ける。
+    <footer>
+      <div>2 / 4「画面モック」</div>
+      <div class="muted">スワイプまたは下部ボタンで移動</div>
+    </footer>
+  </section>
 
-【転写】
-点火の刹那、子守歌が返る。〈ミ—ラ—ファ〉、同じ欠落。『…少し、置く。あなたに。』鼓動と呼吸が半拍だけ同期する。SYNC=同期｜位相=+0.5。ログが灯る。RELAYS=+3｜NEAR=2｜FAR=1｜PHASE=+0.5。私は頷かず、配線の束を押さえた。掌の内側が温む。
+  <!-- Slide 3 -->
+  <section class="slide" data-title="ロードマップ">
+    <header>
+      <div class="kicker">計画</div>
+      <h2>ロードマップ（2年スパン）</h2>
+      <p class="lead">小さく始めて回し、データで磨いていく。</p>
+    </header>
 
-【離脱】
-コロニー船の航跡が薄く伸びる。燃料は尽き、報酬は流れる。胸ポケットの小さなメモリ素子。ブラックリストを受け入れる。BLACKLIST=60ヶ月｜QUAL=REVOKED｜FINES=+12%｜LEDGER=OVERDUE→TRANSFER｜GUARANTOR=SISTER(IMPACT)。私はスロットルを絞り、無音の空間に身を置く。アザミの返答はもうない。
+    <main class="grid">
+      <div class="card" style="grid-column: span 12;">
+        <div class="timeline">
+          <div class="phase active">
+            <div><strong>フェーズ1</strong><br><span class="muted">0〜6ヶ月</span></div>
+            <div class="barwrap"><div class="bar"></div></div>
+          </div>
+          <div class="card muted" style="grid-column: span 12; margin-top:-4px; padding:12px 14px;">
+            ・MVP：お題投稿 / Q&A / 投票&ランキング / プロフィール&称号<br>
+            ・クローズドβ（50〜100人）→ 過疎感対策。初期アンケートで改善。
+          </div>
 
-【芽】
-少し時間が過ぎる。温室で若芽が開く。光度計を覗く。LC=光度曲線｜変化=歪み小。遠方の尾がわずかに色を変える。ラジオの底で同じ音階が揺れる。私は水を一滴落とす。緑灯は呼吸している。</pre>
-          </article>
-  </div>
+          <div class="phase">
+            <div><strong>フェーズ2</strong><br><span class="muted">6〜12ヶ月</span></div>
+            <div class="barwrap"><div class="bar"></div></div>
+          </div>
+          <div class="card muted" style="grid-column: span 12; margin-top:-4px; padding:12px 14px;">
+            ・スポンサーお題（参加型広告）導入、簡易収益化。<br>
+            ・イベント：月間テーマ、スポンサー賞。<br>
+            ・ポートフォリオ自動生成（作品が履歴に並ぶ）。
+          </div>
+
+          <div class="phase">
+            <div><strong>フェーズ3</strong><br><span class="muted">1〜2年</span></div>
+            <div class="barwrap"><div class="bar"></div></div>
+          </div>
+          <div class="card muted" style="grid-column: span 12; margin-top:-4px; padding:12px 14px;">
+            ・AI活用：コードの自動フィードバック / お題提案 / 不正検知。<br>
+            ・チーム開発お題、API連携系の高難易度カテゴリ。
+          </div>
+
+          <div class="phase">
+            <div><strong>フェーズ4</strong><br><span class="muted">2年〜</span></div>
+            <div class="barwrap"><div class="bar"></div></div>
+          </div>
+          <div class="card muted" style="grid-column: span 12; margin-top:-4px; padding:12px 14px;">
+            ・海外展開、他分野（デザイン / AI / ゲーム）へ拡張。<br>
+            ・匿名カルチャーを保ったまま規模の拡大。
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div>3 / 4「ロードマップ」</div>
+      <div class="muted">スワイプまたは下部ボタンで移動</div>
+    </footer>
+  </section>
+
+  <!-- Slide 4 -->
+  <section class="slide" data-title="未来像 & 仲間募集">
+    <header>
+      <div class="kicker">ビジョン</div>
+      <h2>未来像 & 仲間募集</h2>
+      <p class="lead">匿名でも、成長の物語が残る場所。広告も「遊び」として楽しめる。</p>
+    </header>
+
+    <main class="grid">
+      <div class="card" style="grid-column: span 7;">
+        <span class="badge">未来像</span>
+        <ul class="list">
+          <li>初心者が上級者に育ち、<strong>実績が自動でポートフォリオ化</strong>。</li>
+          <li><strong>参加型広告</strong>：企業のお題で遊ぶ → 自然に収益化。</li>
+          <li>世界中のプログラマーが<strong>匿名で交流</strong>する“プログラマー版pixiv”。</li>
+        </ul>
+        <div class="card" style="margin-top:12px">
+          <div class="muted">キャッチコピー案</div>
+          <div style="font-size:20px; margin-top:6px"><strong>「作ろう。見せよう。育て合おう。」</strong></div>
+        </div>
+      </div>
+      <div class="card" style="grid-column: span 5;">
+        <span class="badge">求める仲間（Co-founder / 初期メンバー）</span>
+        <ul class="list">
+          <li>フロントエンド / バックエンド エンジニア</li>
+          <li>デザイン / UI（ワイヤーからビジュアルまで）</li>
+          <li>広告営業（スポンサーお題の導入）</li>
+          <li>AI担当（コード評価・お題生成・不正検知）</li>
+        </ul>
+        <div class="card" style="margin-top:12px">
+          <div class="muted">お問い合わせ</div>
+          <div>ご連絡先：<em>（ここにX/メール/Discordを記載）</em></div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div>4 / 4「未来像 & 仲間募集」</div>
+      <div class="muted">スワイプまたは下部ボタンで移動</div>
+    </footer>
+  </section>
+</div>
+
+<!-- Pagination dots -->
+<div class="dots" id="dots"></div>
+
+<!-- Fixed Mobile Nav -->
+<div class="mobile-nav">
+  <button class="btn" id="prevBtn" aria-label="前のスライド">← 前へ</button>
+  <button class="btn primary" id="nextBtn" aria-label="次のスライド">次へ →</button>
+</div>
+
+<script>
+(function(){
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const dotsWrap = document.getElementById('dots');
+  slides.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className = 'dot' + (i===0 ? ' active':'');
+    dotsWrap.appendChild(d);
+  });
+  const dots = Array.from(document.querySelectorAll('.dot'));
+
+  let idx = 0;
+  const clamp = (n)=> (n + slides.length) % slides.length;
+
+  const update = ()=>{
+    slides.forEach((s,i)=>{
+      s.classList.remove('active','prev');
+      if(i === idx) s.classList.add('active');
+      if(i < idx) s.classList.add('prev');
+    });
+    dots.forEach((d,i)=> d.classList.toggle('active', i===idx));
+  };
+
+  const next = ()=>{ idx = clamp(idx + 1); update(); };
+  const prev = ()=>{ idx = clamp(idx - 1); update(); };
+
+  // Buttons
+  document.getElementById('nextBtn').addEventListener('click', next);
+  document.getElementById('prevBtn').addEventListener('click', prev);
+
+  // Keyboard
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'ArrowRight' || e.key === 'PageDown') next();
+    if(e.key === 'ArrowLeft' || e.key === 'PageUp') prev();
+  });
+
+  // Swipe
+  let startX = null, startY = null, touching = false;
+  const threshold = 40; // px
+  const onTouchStart = (e)=>{
+    const t = e.touches[0];
+    startX = t.clientX; startY = t.clientY; touching = true;
+  };
+  const onTouchMove = (e)=>{
+    if(!touching) return;
+    // prevent accidental vertical scroll only if horizontal is dominant
+    const dx = e.touches[0].clientX - startX;
+    const dy = e.touches[0].clientY - startY;
+    if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 10){
+      e.preventDefault();
+    }
+  };
+  const onTouchEnd = (e)=>{
+    if(!touching) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - startX;
+    if(Math.abs(dx) > threshold){
+      if(dx < 0) next(); else prev();
+    }
+    touching = false;
+  };
+
+  slides.forEach(s=>{
+    s.addEventListener('touchstart', onTouchStart, {passive:true});
+    s.addEventListener('touchmove', onTouchMove, {passive:false});
+    s.addEventListener('touchend', onTouchEnd, {passive:true});
+  });
+
+  update();
+})();
+</script>
 </body>
 </html>
