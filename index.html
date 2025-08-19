@@ -1,125 +1,237 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>プログラマー匿名掲示板案</title>
-<meta name="color-scheme" content="light dark">
-<style>
-  :root{
-    --bg:#0f1116;
-    --fg:#e9ecf4;
-    --muted:#9aa7bf;
-    --accent:#6ea8fe;
-    --card:#151a22;
-    --border:#2a3240;
-  }
-  @media (prefers-color-scheme: light){
-    :root{ --bg:#f7f9ff; --fg:#0f1116; --muted:#4f5b74; --accent:#3b6cff; --card:#ffffff; --border:#e5e9f2; }
-  }
-  *{ box-sizing:border-box }
-  body{
-    margin:0; background:var(--bg); color:var(--fg);
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-      "Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic","Meiryo", Arial, sans-serif;
-    line-height:1.65; -webkit-text-size-adjust:100%;
-  }
-  .wrap{ max-width:780px; margin:0 auto; padding:24px clamp(16px,4vw,24px); }
-  header{ padding:8px 0 6px; }
-  h1{ font-size:clamp(26px,6vw,40px); margin:.2em 0 .1em }
-  .sub{ color:var(--muted); margin:0 0 12px; font-size:clamp(14px,3.2vw,16px) }
-  .card{
-    background:var(--card); border:1px solid var(--border); border-radius:14px;
-    padding:clamp(14px,3.2vw,18px); margin:12px 0;
-  }
-  h2{ font-size:clamp(18px,4.8vw,22px); margin:.2em 0 .2em }
-  p,li{ margin:.4em 0 }
-  ul{ padding-left:22px }
-  .pill{
-    display:inline-block; padding:6px 10px; border-radius:999px;
-    background: color-mix(in srgb, var(--accent) 15%, transparent);
-    color: color-mix(in srgb, var(--accent) 85%, var(--fg));
-    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
-    font-weight:700; letter-spacing:.02em; font-size:12px;
-  }
-  .grid{ display:grid; gap:10px; grid-template-columns: 1fr 1fr }
-  @media (max-width:720px){ .grid{ grid-template-columns: 1fr } }
-  .ex{
-    display:inline-block; padding:6px 10px; border-radius:8px;
-    border:1px dashed var(--border); color:var(--muted); font-size:13px;
-  }
-  a.btn{
-    display:inline-block; margin-top:8px; padding:10px 14px; border-radius:10px;
-    border:1px solid var(--border); text-decoration:none; color:var(--fg);
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
-    font-weight:800;
-  }
-  footer{ color:var(--muted); font-size:13px; text-align:center; padding:18px 0 8px }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>上毛高原キャンプグラウンド - 8月23日(土) 計画</title>
+  <style>
+    :root {
+      --bg: #0f0f12;
+      --card: #17171c;
+      --text: #e8e8ee;
+      --muted: #a3a3b2;
+      --accent: #7cc4ff;
+      --accent-2: #b1f49b;
+      --border: #2a2a33;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #ffffff;
+        --card: #f6f7fb;
+        --text: #1b1b1f;
+        --muted: #55586a;
+        --accent: #006dff;
+        --accent-2: #0a8f2a;
+        --border: #e1e1e8;
+      }
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN",
+                   "Yu Gothic", "YuGothic", "Noto Sans JP", "Meiryo", sans-serif;
+      line-height: 1.65;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 24px auto;
+      padding: 0 16px 64px;
+    }
+    header {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      margin: 0;
+      letter-spacing: 0.02em;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin: 16px 0;
+      box-shadow: 0 4px 10px rgba(0,0,0,.08);
+    }
+    h2 {
+      margin: 0 0 8px;
+      font-size: 1.1rem;
+      border-left: 4px solid var(--accent);
+      padding-left: 10px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 720px) {
+      .grid-2 { grid-template-columns: 1fr 1fr; }
+    }
+    ul, ol {
+      margin: 8px 0 0 1.1em;
+      padding: 0;
+    }
+    .tag {
+      display: inline-block;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.82rem;
+      border-radius: 999px;
+      padding: 6px 10px;
+      margin-top: 4px;
+    }
+    .timeline {
+      position: relative;
+      margin: 0;
+      padding-left: 1.2rem;
+      list-style: none;
+    }
+    .timeline li {
+      position: relative;
+      padding: 10px 0 10px 12px;
+      border-left: 2px dashed var(--border);
+    }
+    .timeline li::before {
+      content: "";
+      position: absolute;
+      left: -7px;
+      top: 18px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--accent) 25%, transparent);
+    }
+    .time {
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      margin-right: 6px;
+    }
+    .note {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+    .money {
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+    .footer {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 28px;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .chip {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+    }
+    .muted {
+      color: var(--muted);
+    }
+    .inline {
+      display: inline-block;
+      margin-left: 0.25em;
+    }
+    /* print */
+    @media print {
+      .wrap { margin: 0; padding: 0; }
+      .card { break-inside: avoid; }
+      .chips { display: none; }
+    }
+  </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <h1>匿名プログラミングコミュニティ</h1>
-      <p class="sub">毎週ちょっとした「お題」を出して、みんなで作って見せ合うだけのサイト。</p>
+      <h1>上毛高原キャンプグラウンド</h1>
+      <div class="sub">8月23日(土) チェックイン <strong>15:00</strong> ・ 集合〜持ち物まとめ</div>
+      <div class="chips">
+        <span class="chip">#キャンプ</span>
+        <span class="chip">#群馬</span>
+        <span class="chip">#前半組／後半組</span>
+      </div>
     </header>
 
     <section class="card">
-      <h2>やりたいこと（ざっくり）</h2>
+      <h2>集合・買い物</h2>
+      <p><span class="tag">11:00</span> フォレストモール集合 → 昼ごはん &amp; 買い出し</p>
       <ul>
-        <li>毎週お題（例：<span class="ex">好きな飲み物のLPを作る</span> / <span class="ex">APIで天気を出す</span>）</li>
-        <li>作ったらURLを貼る → みんなで見て評価　(高評価/コメント)</li>
-        <li>投票でゆるいランキング。称号がちょっと貯まる</li>
-        <li>困ったらミニQ&amp;A（知恵袋っぽく、匿名でOK）</li>
+        <li>買い物：夜ごはん（<span class="muted">ライン参照</span>）・朝ごはん・雑貨（紙皿 など）</li>
+        <li>一人あたり目安：<span class="money">¥4,000</span></li>
       </ul>
     </section>
 
-    <section class="grid">
-      <div class="card">
-        <h2>トーン & ルール</h2>
+    <section class="card">
+      <h2>当日の流れ</h2>
+      <ol class="timeline">
+        <li><span class="time">11:00</span>フォレストモール集合・買い出し</li>
+        <li><span class="time">14:00</span>前半組 出発</li>
+        <li>
+          <span class="time">15:00</span>キャンプ場 到着（予約・受付 など）
+          <div class="note">その後、後半組が順次集合</div>
+        </li>
+        <li>
+          <span class="time">2日目 12:00</span>チェックアウト
+          <div class="note">解散して帰路へ</div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="card grid-2">
+      <div>
+        <h2>前半組</h2>
         <ul>
-          <li>ゆるい / 褒め合い重視 🙌</li>
-          <li>匿名でOK、実名強要なし</li>
-          <li>パクリ禁止・引用は明記</li>
+          <li>11:00にフォレストモール集合</li>
+          <li>買い物（夜ごはん・朝ごはん・雑貨）</li>
+          <li>角田の家で車に乗り換えてキャンプ場へ</li>
+          <li>チェックインは 15:00</li>
         </ul>
       </div>
-      <div class="card">
-        <h2>なにが楽しい？</h2>
+      <div>
+        <h2>後半組</h2>
         <ul>
-          <li>毎週「作る理由」ができる</li>
-          <li>人の作品から学べる</li>
-          <li>承認欲求が満たせる</li>
+          <li>模試終了後、各自の車で現地へ</li>
+          <li>保護者同伴が難しい場合は、乗り合わせを手配</li>
         </ul>
       </div>
     </section>
 
     <section class="card">
-      <h2>こんなお題を想定</h2>
+      <h2>持ち物リスト</h2>
       <ul>
-        <li>初級：自己紹介ページ / フォーム作成 / 画像ギャラリー</li>
-        <li>中級：外部APIで何か出す / レスポンシブ対応</li>
-        <li>上級：小さなWebアプリ / ミニゲーム / パフォーマンス改善</li>
+        <li>着替え</li>
+        <li>現金 <span class="money">¥15,000</span> 以上（千円札・百円玉など細かいお金も）</li>
+        <li>雨具</li>
+        <li>歯みがきセット</li>
+        <li>タオル</li>
+        <li>飲み物</li>
+        <li>虫よけ（任意）</li>
       </ul>
     </section>
 
-    <section class="grid">
-      <div class="card">
-        <h2>今のところ</h2>
-        <p>まずは超シンプルに始める予定。<br>
-        お題・投稿・投票・ミニQ&amp;Aだけ。</p>
-      </div>
-      <div class="card">
-        <h2>あとでやるかも</h2>
-        <ul>
-          <li>スポンサーお題（参加型広告）</li>
-          <li>作品の自動ポートフォリオ化</li>
-          <li>AIでの軽いコードフィードバック</li>
-          <li>フォローシステムを追加して路線を変更(収益化とかも実装)</li>
-        </ul>
-      </div>
+    <section class="footer">
+      <div>このページは元のメモを読みやすく整理したまとめ版です。</div>
+      <div class="muted">更新して配布する場合は、集合時間・人数・交通手段などの変更点にご注意ください。</div>
     </section>
   </div>
-
-<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
